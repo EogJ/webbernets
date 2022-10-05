@@ -7,10 +7,11 @@ class UserSessionsController < ApplicationController
   end
 
   def create
-    @user = login(params[:email], params[:password])
-    return failed_login unless @user
-    return failed_login if @user.deleted
-    redirect_back_or_to(dashboard_path)
+    if login(params[:email], params[:password])
+      redirect_back_or_to(dashboard_path)
+    else
+      failed_login
+    end
   end
 
   def destroy
