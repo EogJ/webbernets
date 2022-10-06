@@ -4,11 +4,11 @@ class ProjectsController < ProjectsBaseController
   layout 'backstage_bare', except: [:index]
 
   def index
-    projects = ProjectsForUser.new(current_user).run
+    projects = current_user.projects
     @facade = OpenStruct.new(
       projects: projects,
       team: current_user.team,
-      unread_counts: UnactionedPromptCounter.new(projects).run
+      unread_counts: 0
     )
     render layout: "backstage_bare"
   end

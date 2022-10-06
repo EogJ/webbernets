@@ -4,7 +4,7 @@ class User < ApplicationRecord
   belongs_to :team
 
   has_many :project_users
-  has_many :projects, through: :project_users
+  has_many :projects, -> { active.order("LOWER(title)") }, through: :project_users
 
   scope :active, -> { where.not(deleted: true) }
 

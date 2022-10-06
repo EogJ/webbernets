@@ -50,12 +50,6 @@ RSpec.describe UserPermissionToProject do
         end
       end
     end
-
-    context "when the project DOES NOT have a specific user list" do
-      it "returns true" do
-        expect(subject.run).to eq(true)
-      end
-    end
   end
 
   context "when the user is NOT on the same team" do
