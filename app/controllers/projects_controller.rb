@@ -8,7 +8,7 @@ class ProjectsController < ProjectsBaseController
     @facade = OpenStruct.new(
       projects: projects,
       team: current_user.team,
-      unread_counts: 0
+      unread_counts: UnactionedPromptCounter.new(projects).run
     )
     render layout: "backstage_bare"
   end
