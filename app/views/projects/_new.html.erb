@@ -4,8 +4,8 @@
 <%= render 'shared/modal', id: 'modal', title: 'New Project' do %>
   <%= form_tag projects_path(from_none: params[:from_none]) do %>
     <div class="form-group">
-      <%= label_tag :name, 'Project Name', class: 'control-label' %>
-      <%= text_field_tag :name, '' , { placeholder: 'Name your project', required: true, class: 'form-control' } %>
+      <%= label_tag :title, 'Project Name', class: 'control-label' %>
+      <%= text_field_tag :title, '' , { placeholder: 'Name your project', required: true, class: 'form-control' } %>
     </div>
     <div class="form-group">
       <%= label_tag :visibility, 'Type', class: 'control-label' %>
@@ -14,8 +14,13 @@
       <% end %>
       <%= select_tag :visibility, options_for_select(['Private', 'Public']),  class: 'form-control'  %>
     </div>
+    <% if current_user.super_user %>
+      <div class="form-group">
+        <%= check_box_tag :join_project, '1', true %>
+        <%= label_tag :join_project, 'Join this project', class: 'control-label' %>
+      </div>
+    <% end %>
     <div class="form-group">
-
       <%= button_tag 'Create', class: 'btn btn-primary' %>
     </div>
   <% end %>

@@ -4,6 +4,7 @@ class Project < ApplicationRecord
   has_many :email_subscriptions
   has_many :releases
   has_many :project_users
+  has_many :users, -> { active }, through: :project_users
   has_many :categories
   before_create :generate_public
   belongs_to :team
