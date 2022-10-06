@@ -8,6 +8,8 @@ class UserPermissionToProject
   end
 
   def run
-    ProjectsForUser.new(@user).run.include? @project
+    return false if @user.deleted?
+
+    @user.super_user || @user.projects.include?(@project)
   end
 end

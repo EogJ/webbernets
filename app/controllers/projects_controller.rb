@@ -4,7 +4,7 @@ class ProjectsController < ProjectsBaseController
   layout 'backstage_bare', except: [:index]
 
   def index
-    projects = ProjectsForUser.new(current_user).run
+    projects = current_user.projects
     @facade = OpenStruct.new(
       projects: projects,
       team: current_user.team,
@@ -18,14 +18,11 @@ class ProjectsController < ProjectsBaseController
   end
 
   def create
-    project = Project.create!(
-      title: params[:name],
-      team: current_user.team,
-      public_feed: params[:visibility] == 'Public'
-    )
-
-    flash[:success] = 'Project created'
-    return redirect_to dashboard_path
+    project = NewProjectForm.new(new_project_params).persist
+    if project
+      flash[:success] = 'Project created'
+      return redirect_to dashboard_path
+    end
   end
 
   def inbox
@@ -46,5 +43,13 @@ class ProjectsController < ProjectsBaseController
       Jobs::SendReleaseEmailForProject, params[:project_public_id]
     )
     redirect_to project_releases_path
+  end
+
+  private
+
+  def new_project_params
+    params
+      .permit(:title, :visibility, :join_project)
+      .merge(current_user: current_user)
   end
 end

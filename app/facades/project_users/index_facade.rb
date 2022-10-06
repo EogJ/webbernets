@@ -9,15 +9,15 @@ module ProjectUsers
     end
 
     def users
-      project.project_users.includes(:user).map(&:user)
+      project.users.order(:first_name)
     end
 
     def available_users
-      project.team.users.reject { |user|  users.include? user }
+      team.users.where.not(id: project.users.ids)
     end
 
     def team
-      project.team
+      @team ||= project.team
     end
   end
 end
